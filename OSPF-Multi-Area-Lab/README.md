@@ -77,8 +77,6 @@ The network contains:
 - Inter-area routing
 - OSPF area summarization
 - Stub areas
-- Totally stubby areas
-- NSSA
 - Default route injection
 
 ## First-Hop Redundancy
