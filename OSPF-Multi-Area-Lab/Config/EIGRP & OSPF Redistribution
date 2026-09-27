@@ -1,88 +1,21 @@
-# Lab 05 - EIGRP and OSPF Redistribution
+R2#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
 
-## Objectives
+!
+! EIGRP AS 100
+!
 
-Configure and verify:
+R2(config)#router eigrp 100
+R2(config-router)#redistribute ospf 1 metric 10000 100 255 1 1500
+R2(config-router)#exit
 
-- EIGRP to OSPF redistribution
-- OSPF to EIGRP redistribution
-- Redistribution metrics
-- External routes
-- Route verification
-- Route filtering
+!
+! OSPF Process 1
+!
 
+R2(config)#router ospf 1
+R2(config-router)#redistribute eigrp 100 subnets
+R2(config-router)#end
 
-# Topology
+R2#write memory
 
-R1
- |
-EIGRP AS 100
- |
-R2
- |
-OSPF Area 0
- |
-R3
-
-
-# Step 1 - EIGRP to OSPF
-
-On R2:
-
-router ospf 1
- redistribute eigrp 100 subnets
-
-
-# Step 2 - OSPF to EIGRP
-
-On R2:
-
-router eigrp 100
- redistribute ospf 1 metric 10000 100 255 1 1500
-
-
-# Step 3 - Verify on R3
-
-show ip route
-
-show ip route ospf
-
-show ip ospf database
-
-
-# Step 4 - Verify on R1
-
-show ip route
-
-show ip route eigrp
-
-
-# Expected Route Types
-
-OSPF redistributed routes:
-
-O E1
-
-or
-
-O E2
-
-
-EIGRP redistributed routes:
-
-D EX
-
-
-# Troubleshooting
-
-Remove the redistribution statement.
-
-Verify which routes disappear.
-
-Restore redistribution.
-
-Verify convergence.
-
-Modify the redistribution metric.
-
-Observe changes in route selection.
