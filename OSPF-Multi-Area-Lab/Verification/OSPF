@@ -1,0 +1,39 @@
+  #Verification
+
+R2#show ip ospf neighbor
+
+R2#show ip ospf
+
+R2#show ip ospf interface brief
+
+R2#show ip ospf interface
+
+R2#show ip ospf database
+
+R2#show ip route ospf
+
+R2#show ip protocols
+
+R2#show running-config | section router ospf
+
+
+  #Checking specific LSA types:
+
+R2#show ip ospf database router
+
+R2#show ip ospf database network
+
+R2#show ip ospf database summary
+
+R2#show ip ospf database external
+
+R2#show ip ospf database nssa-external
+
+
+OSPF area Verification:
+R2#show ip ospf
+
+R2#show ip ospf interface brief
+
+R2#show ip ospf interface
+
