@@ -1,0 +1,147 @@
+# HSRP Design
+
+## Purpose
+
+HSRP provides redundant default gateway functionality for the
+network VLANs.
+
+R2 is configured as the preferred Active router.
+
+R3 operates as the Standby router.
+
+
+# HSRP Parameters
+
+HSRP Version:
+
+2
+
+R2 Priority:
+
+110
+
+R3 Priority:
+
+100
+
+Preemption:
+
+Enabled
+
+
+# VLAN 10
+
+R2:
+
+interface GigabitEthernet1/0.10
+ encapsulation dot1q 10
+ ip address 192.168.10.2 255.255.255.0
+ standby version 2
+ standby 10 ip 192.168.10.1
+ standby 10 priority 110
+ standby 10 preempt
+
+
+R3:
+
+interface GigabitEthernet1/0.10
+ encapsulation dot1q 10
+ ip address 192.168.10.3 255.255.255.0
+ standby version 2
+ standby 10 ip 192.168.10.1
+ standby 10 priority 100
+ standby 10 preempt
+
+
+# VLAN 20
+
+HSRP VIP:
+
+192.168.20.1
+
+R2:
+
+192.168.20.2
+
+R3:
+
+192.168.20.3
+
+
+# VLAN 30
+
+HSRP VIP:
+
+192.168.30.1
+
+R2:
+
+192.168.30.2
+
+R3:
+
+192.168.30.3
+
+
+# VLAN 40
+
+HSRP VIP:
+
+192.168.40.1
+
+R2:
+
+192.168.40.2
+
+R3:
+
+192.168.40.3
+
+
+# VLAN 50
+
+HSRP VIP:
+
+192.168.50.1
+
+R2:
+
+192.168.50.2
+
+R3:
+
+192.168.50.3
+
+
+# VLAN 60
+
+HSRP VIP:
+
+192.168.60.1
+
+R2:
+
+192.168.60.2
+
+R3:
+
+192.168.60.3
+
+
+# Verification
+
+show standby brief
+
+show standby
+
+show ip interface brief
+
+
+# Failure Test
+
+1. Confirm R2 is Active.
+2. Confirm R3 is Standby.
+3. Shut down the appropriate R2 interface.
+4. Verify R3 becomes Active.
+5. Restore R2.
+6. Verify preemption behavior.
