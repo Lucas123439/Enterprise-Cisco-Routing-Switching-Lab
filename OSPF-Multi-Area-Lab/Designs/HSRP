@@ -2,13 +2,15 @@
 
 ## Purpose
 
-HSRP provides redundant default gateway functionality for the
-network VLANs.
+HSRP provides redundant default gateway functionality for the network VLANs.
 
 R2 is configured as the preferred Active router.
 
 R3 operates as the Standby router.
 
+If R2 becomes unavailable, R3 can take over as the Active gateway. When R2 returns, preemption allows R2 to regain the Active role because it has the higher priority.
+
+---
 
 # HSRP Parameters
 
@@ -28,11 +30,37 @@ Preemption:
 
 Enabled
 
+HSRP Virtual IP Address:
+
+The `.1` address of each VLAN subnet.
+
+R2 uses the `.2` address.
+
+R3 uses the `.3` address.
+
+---
 
 # VLAN 10
 
+Network:
+
+192.168.10.0/24
+
+HSRP Virtual IP:
+
+192.168.10.1
+
 R2:
 
+192.168.10.2
+
+R3:
+
+192.168.10.3
+
+## R2 Configuration
+
+```cisco
 interface GigabitEthernet1/0.10
  encapsulation dot1q 10
  ip address 192.168.10.2 255.255.255.0
@@ -40,10 +68,7 @@ interface GigabitEthernet1/0.10
  standby 10 ip 192.168.10.1
  standby 10 priority 110
  standby 10 preempt
-
-
-R3:
-
+R3 Configuration
 interface GigabitEthernet1/0.10
  encapsulation dot1q 10
  ip address 192.168.10.3 255.255.255.0
@@ -51,11 +76,13 @@ interface GigabitEthernet1/0.10
  standby 10 ip 192.168.10.1
  standby 10 priority 100
  standby 10 preempt
+VLAN 20
 
+Network:
 
-# VLAN 20
+192.168.20.0/24
 
-HSRP VIP:
+HSRP Virtual IP:
 
 192.168.20.1
 
@@ -67,10 +94,29 @@ R3:
 
 192.168.20.3
 
+R2 Configuration
+interface GigabitEthernet1/0.20
+ encapsulation dot1q 20
+ ip address 192.168.20.2 255.255.255.0
+ standby version 2
+ standby 20 ip 192.168.20.1
+ standby 20 priority 110
+ standby 20 preempt
+R3 Configuration
+interface GigabitEthernet1/0.20
+ encapsulation dot1q 20
+ ip address 192.168.20.3 255.255.255.0
+ standby version 2
+ standby 20 ip 192.168.20.1
+ standby 20 priority 100
+ standby 20 preempt
+VLAN 30
 
-# VLAN 30
+Network:
 
-HSRP VIP:
+192.168.30.0/24
+
+HSRP Virtual IP:
 
 192.168.30.1
 
@@ -82,10 +128,29 @@ R3:
 
 192.168.30.3
 
+R2 Configuration
+interface GigabitEthernet1/0.30
+ encapsulation dot1q 30
+ ip address 192.168.30.2 255.255.255.0
+ standby version 2
+ standby 30 ip 192.168.30.1
+ standby 30 priority 110
+ standby 30 preempt
+R3 Configuration
+interface GigabitEthernet1/0.30
+ encapsulation dot1q 30
+ ip address 192.168.30.3 255.255.255.0
+ standby version 2
+ standby 30 ip 192.168.30.1
+ standby 30 priority 100
+ standby 30 preempt
+VLAN 40
 
-# VLAN 40
+Network:
 
-HSRP VIP:
+192.168.40.0/24
+
+HSRP Virtual IP:
 
 192.168.40.1
 
@@ -97,10 +162,29 @@ R3:
 
 192.168.40.3
 
+R2 Configuration
+interface GigabitEthernet1/0.40
+ encapsulation dot1q 40
+ ip address 192.168.40.2 255.255.255.0
+ standby version 2
+ standby 40 ip 192.168.40.1
+ standby 40 priority 110
+ standby 40 preempt
+R3 Configuration
+interface GigabitEthernet1/0.40
+ encapsulation dot1q 40
+ ip address 192.168.40.3 255.255.255.0
+ standby version 2
+ standby 40 ip 192.168.40.1
+ standby 40 priority 100
+ standby 40 preempt
+VLAN 50
 
-# VLAN 50
+Network:
 
-HSRP VIP:
+192.168.50.0/24
+
+HSRP Virtual IP:
 
 192.168.50.1
 
@@ -112,10 +196,29 @@ R3:
 
 192.168.50.3
 
+R2 Configuration
+interface GigabitEthernet1/0.50
+ encapsulation dot1q 50
+ ip address 192.168.50.2 255.255.255.0
+ standby version 2
+ standby 50 ip 192.168.50.1
+ standby 50 priority 110
+ standby 50 preempt
+R3 Configuration
+interface GigabitEthernet1/0.50
+ encapsulation dot1q 50
+ ip address 192.168.50.3 255.255.255.0
+ standby version 2
+ standby 50 ip 192.168.50.1
+ standby 50 priority 100
+ standby 50 preempt
+VLAN 60
 
-# VLAN 60
+Network:
 
-HSRP VIP:
+192.168.60.0/24
+
+HSRP Virtual IP:
 
 192.168.60.1
 
@@ -127,21 +230,114 @@ R3:
 
 192.168.60.3
 
+R2 Configuration
+interface GigabitEthernet1/0.60
+ encapsulation dot1q 60
+ ip address 192.168.60.2 255.255.255.0
+ standby version 2
+ standby 60 ip 192.168.60.1
+ standby 60 priority 110
+ standby 60 preempt
+R3 Configuration
+interface GigabitEthernet1/0.60
+ encapsulation dot1q 60
+ ip address 192.168.60.3 255.255.255.0
+ standby version 2
+ standby 60 ip 192.168.60.1
+ standby 60 priority 100
+ standby 60 preempt
+HSRP Operation
 
-# Verification
+Each VLAN has three gateway addresses:
+
+.1 = HSRP Virtual IP
+.2 = R2 physical gateway address
+.3 = R3 physical gateway address
+
+For example, VLAN 10 uses:
+
+HSRP VIP: 192.168.10.1
+R2:       192.168.10.2
+R3:       192.168.10.3
+
+Hosts use the HSRP Virtual IP as their default gateway:
+
+Default Gateway: 192.168.10.1
+
+R2 has a priority of 110 while R3 has a priority of 100, making R2 the preferred Active router.
+
+The preempt command allows R2 to reclaim the Active role after recovering.
+
+HSRP Verification
+HSRP Summary
+show standby brief
+
+This provides a quick overview of the HSRP groups, virtual IPs, Active router, Standby router, and priorities.
+
+Detailed HSRP Information
+show standby
+Interface Status and IP Addresses
+show ip interface brief
+Verify VLAN Subinterfaces
+show interfaces GigabitEthernet1/0.10
+show interfaces GigabitEthernet1/0.20
+show interfaces GigabitEthernet1/0.30
+show interfaces GigabitEthernet1/0.40
+show interfaces GigabitEthernet1/0.50
+show interfaces GigabitEthernet1/0.60
+HSRP Failure Test
+
+The lab can be used to demonstrate gateway redundancy and HSRP failover.
+
+Step 1 — Verify R2 is Active
+show standby brief
+
+Expected state:
+
+R2: Active
+R3: Standby
+Step 2 — Verify R3 is Standby
+show standby brief
+
+R3 should report the Standby state for the HSRP groups.
+
+Step 3 — Simulate an R2 Failure
+
+Shut down the appropriate R2 VLAN subinterface or interface being used for the test.
+
+Example:
+
+R2(config)#interface GigabitEthernet1/0.10
+R2(config-subif)#shutdown
+Step 4 — Verify R3 Becomes Active
+
+On R3:
 
 show standby brief
 
-show standby
+R3 should transition to the Active state for the affected HSRP group.
 
-show ip interface brief
+Step 5 — Restore R2
+R2(config)#interface GigabitEthernet1/0.10
+R2(config-subif)#no shutdown
+Step 6 — Verify Preemption
 
+Because R2 has the higher priority and preemption is enabled, R2 should regain the Active role after recovering.
 
-# Failure Test
+show standby brief
 
-1. Confirm R2 is Active.
-2. Confirm R3 is Standby.
-3. Shut down the appropriate R2 interface.
-4. Verify R3 becomes Active.
-5. Restore R2.
-6. Verify preemption behavior.
+Expected result:
+
+R2: Active
+R3: Standby
+Design Summary
+
+HSRP is implemented across VLANs 10, 20, 30, 40, 50, and 60 to provide redundant default gateway services.
+
+R2 is configured with a priority of 110 and acts as the preferred Active router. R3 is configured with a priority of 100 and operates as the Standby router.
+
+Each VLAN uses an HSRP Virtual IP address ending in .1, while R2 and R3 use .2 and .3 respectively.
+
+HSRP version 2 is used across all VLANs, and preemption is enabled so that R2 can reclaim the Active role after recovering from a failure.
+
+The design provides first-hop redundancy while allowing both R2 and R3 to participate in routing and provide gateway services for the VLANs.
