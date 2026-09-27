@@ -1,0 +1,27 @@
+#Verification:
+
+R2#show standby brief
+
+R2#show standby
+
+R2#show standby GigabitEthernet1/0.10
+
+R2#show ip interface brief
+
+R2#show ip route
+
+R2#show running-config interface GigabitEthernet1/0.10
+
+  Verification for Standby Router:
+
+R3#show standby brief
+
+R3#show standby
+
+R3#show standby GigabitEthernet1/0.10
+
+R3#show ip interface brief
+
+R3#show ip route
+
+R3#show running-config interface GigabitEthernet1/0.10
