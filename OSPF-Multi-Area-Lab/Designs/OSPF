@@ -6,152 +6,258 @@ OSPF process ID:
 
 1
 
+---
 
-# Router IDs
+# OSPF Router IDs
 
-R2:
+### R2
 
+```text
 2.2.2.2
-
-R3:
-
+R3
 3.3.3.3
 
+The router IDs are configured using the Loopback0 addresses.
 
-# Area 0
+Area 0
 
 R2 and R3 form the primary OSPF adjacency across:
 
 10.23.23.0/30
-
-R2:
-
+R2
 10.23.23.1/30
-
-R3:
-
+R3
 10.23.23.2/30
 
+This Layer 3 point-to-point network provides the OSPF Area 0 transit connection between R2 and R3.
 
-# OSPF ABR
+OSPF ABR
 
-R3 is designed to operate as an Area Border Router.
+R3 is designed to operate as an OSPF Area Border Router (ABR).
 
 R3 connects:
 
 Area 0
-
-and
-
+   |
+   |
 Area 10
 
+An ABR connects two or more OSPF areas and maintains separate LSDB information for each area.
 
-# OSPF Features
+OSPF Features
 
-The lab demonstrates:
+The lab demonstrates the following OSPF concepts and configuration features:
 
-- OSPF neighbor formation
-- Passive interfaces
-- OSPF authentication
-- OSPF LSDB
-- LSA types
-- Inter-area routing
-- ABR operation
-- Area summarization
-- Stub areas
-- Totally stubby areas
-- NSSA
-- Default route injection
-
-
-# Basic OSPF Configuration
-
-R2:
-
+OSPF neighbor formation
+OSPF passive interfaces
+OSPF authentication
+OSPF Link-State Database (LSDB)
+LSA types
+Inter-area routing
+ABR operation
+Area summarization
+Stub areas
+Totally stubby areas
+NSSA
+Totally stubby NSSA
+Default route injection
+OSPF route verification
+Basic OSPF Configuration
+R2
 router ospf 1
  router-id 2.2.2.2
  network 10.23.23.0 0.0.0.3 area 0
-
-
-R3:
-
+R3
 router ospf 1
  router-id 3.3.3.3
  network 10.23.23.0 0.0.0.3 area 0
 
+The 10.23.23.0/30 network allows R2 and R3 to form their OSPF neighbor adjacency in Area 0.
 
-# Passive Interfaces
+OSPF Loopbacks
 
-VLAN and loopback interfaces can be made passive when they should
-advertise their networks but should not form OSPF adjacencies.
+Loopback interfaces provide stable router IDs and additional networks that can be advertised through OSPF.
+
+R2
+interface loopback0
+ ip address 2.2.2.2 255.255.255.255
+
+interface loopback1
+ ip address 22.22.22.2 255.255.255.255
+R3
+interface loopback0
+ ip address 3.3.3.3 255.255.255.255
+
+interface loopback1
+ ip address 33.33.33.3 255.255.255.255
+Passive Interfaces
+
+VLAN subinterfaces and loopback interfaces can be made passive when their networks should be advertised through OSPF but they should not form OSPF neighbor adjacencies.
 
 Example:
 
 router ospf 1
+ passive-interface loopback0
  passive-interface loopback1
 
+The passive interface continues to advertise its connected network into OSPF, but OSPF Hello packets are not sent through that interface.
 
-# OSPF Authentication
+OSPF VLAN Networks
+
+R2 and R3 use Router-on-a-Stick subinterfaces for the VLAN gateways.
+
+The VLAN networks are:
+
+192.168.10.0/24
+192.168.20.0/24
+192.168.30.0/24
+192.168.40.0/24
+192.168.50.0/24
+192.168.60.0/24
+
+These networks can be advertised into OSPF while the VLAN subinterfaces remain passive.
 
 Example:
 
-interface GigabitEthernet0/0
+router ospf 1
+ network 192.168.10.0 0.0.0.255 area 0
+ network 192.168.20.0 0.0.0.255 area 0
+ network 192.168.30.0 0.0.0.255 area 0
+ network 192.168.40.0 0.0.0.255 area 0
+ network 192.168.50.0 0.0.0.255 area 0
+ network 192.168.60.0 0.0.0.255 area 0
+
+The VLAN interfaces can then be configured as passive interfaces because they are used to advertise networks rather than form OSPF neighbor relationships.
+
+OSPF Authentication
+
+OSPF authentication can be configured on the R2-R3 Area 0 adjacency.
+
+Example:
+
+interface GigabitEthernet0/1
  ip ospf authentication message-digest
  ip ospf message-digest-key 1 md5 CCNP
 
+The authentication configuration must match on both sides of the OSPF adjacency.
 
-# OSPF Area Summarization
+OSPF Area Summarization
 
-ABR summarization example:
+R3 operates as the ABR between Area 0 and Area 10.
+
+The Area 10 loopback network used in the lab is:
+
+33.33.33.3/32
+
+The corresponding Area 10 summary configuration is:
 
 router ospf 1
- area 10 range 10.10.0.0 255.255.0.0
+ area 10 range 33.33.33.3 255.255.255.255
 
+This represents the specific /32 prefix associated with the Area 10 network.
 
-# Default Route
+For a larger production-style Area 10 design containing multiple contiguous networks, a larger summary prefix could be used.
 
-Example:
+Default Route
 
-ip route 0.0.0.0 0.0.0.0 <next-hop>
+R2 is configured with a static default route pointing toward R3.
+
+Next hop:
+
+10.23.23.2
+
+Configuration:
+
+ip route 0.0.0.0 0.0.0.0 10.23.23.2
+
+The default route can then be injected into OSPF:
 
 router ospf 1
  default-information originate
 
+This allows R2 to advertise the default route into the OSPF domain.
 
-# Stub Area
+OSPF Stub Area
+
+A standard stub area blocks external Type 5 LSAs and uses a default route instead.
+
+Configuration:
 
 router ospf 1
  area 10 stub
+Totally Stubby Area
 
+A totally stubby area blocks external LSAs and inter-area summary LSAs, relying on a default route from the ABR.
 
-# Totally Stubby Area
+Configuration:
 
 router ospf 1
  area 10 stub no-summary
+OSPF NSSA
 
+A Not-So-Stubby Area (NSSA) allows external routes to be introduced into the area while restricting external LSAs entering from outside.
 
-# NSSA
+Configuration:
 
 router ospf 1
  area 10 nssa
+NSSA Totally Stubby Area
 
+An NSSA can also be configured to restrict inter-area routes while still allowing controlled external route injection.
 
-# NSSA Totally Stubby
+Configuration:
 
 router ospf 1
  area 10 nssa no-summary
+OSPF LSA Types
 
+The lab demonstrates the major OSPF LSA concepts:
 
-# Verification
+Type 1 — Router LSA
 
+Generated by every OSPF router and describes the router's links within an area.
+
+Type 2 — Network LSA
+
+Generated by the DR on multi-access networks and describes the routers connected to the network segment.
+
+Type 3 — Summary LSA
+
+Generated by an ABR to advertise networks from one OSPF area into another.
+
+Type 4 — ASBR Summary LSA
+
+Generated by an ABR to provide reachability information toward an ASBR.
+
+Type 5 — External LSA
+
+Generated by an ASBR when external routes are redistributed into OSPF.
+
+Type 7 — NSSA External LSA
+
+Generated inside an NSSA when external routes are introduced into the area.
+
+OSPF Verification
+OSPF Neighbor Adjacencies
 show ip ospf neighbor
-
+OSPF Link-State Database
 show ip ospf database
-
+OSPF Interface Information
 show ip ospf interface
-
+OSPF Interface Summary
 show ip ospf interface brief
-
+OSPF Routes
 show ip route ospf
-
+OSPF Configuration and Networks
 show ip protocols
+Design Summary
+
+R2 and R3 use OSPF process 1 to provide dynamic routing across the 10.23.23.0/30 Area 0 transit network.
+
+R2 uses 2.2.2.2 as its OSPF router ID, while R3 uses 3.3.3.3.
+
+R3 is designed as the ABR connecting Area 0 and Area 10. The design demonstrates inter-area routing, area summarization, OSPF LSAs, stub area types, NSSA, passive interfaces, authentication, and default route injection.
+
+R2 also participates in EIGRP AS 100 and serves as the redistribution boundary between the EIGRP and OSPF routing domains.
+
+The OSPF design provides dynamic routing between the enterprise network segments while demonstrating multiple OSPF control-plane and route-optimization features.
