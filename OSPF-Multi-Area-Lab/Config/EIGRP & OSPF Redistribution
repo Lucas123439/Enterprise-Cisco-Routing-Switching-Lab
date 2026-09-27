@@ -1,0 +1,88 @@
+# Lab 05 - EIGRP and OSPF Redistribution
+
+## Objectives
+
+Configure and verify:
+
+- EIGRP to OSPF redistribution
+- OSPF to EIGRP redistribution
+- Redistribution metrics
+- External routes
+- Route verification
+- Route filtering
+
+
+# Topology
+
+R1
+ |
+EIGRP AS 100
+ |
+R2
+ |
+OSPF Area 0
+ |
+R3
+
+
+# Step 1 - EIGRP to OSPF
+
+On R2:
+
+router ospf 1
+ redistribute eigrp 100 subnets
+
+
+# Step 2 - OSPF to EIGRP
+
+On R2:
+
+router eigrp 100
+ redistribute ospf 1 metric 10000 100 255 1 1500
+
+
+# Step 3 - Verify on R3
+
+show ip route
+
+show ip route ospf
+
+show ip ospf database
+
+
+# Step 4 - Verify on R1
+
+show ip route
+
+show ip route eigrp
+
+
+# Expected Route Types
+
+OSPF redistributed routes:
+
+O E1
+
+or
+
+O E2
+
+
+EIGRP redistributed routes:
+
+D EX
+
+
+# Troubleshooting
+
+Remove the redistribution statement.
+
+Verify which routes disappear.
+
+Restore redistribution.
+
+Verify convergence.
+
+Modify the redistribution metric.
+
+Observe changes in route selection.
