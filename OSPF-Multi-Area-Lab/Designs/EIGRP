@@ -6,109 +6,193 @@ EIGRP AS:
 
 100
 
+---
 
 ## EIGRP Topology
 
-R1 -------- R2
-      AS 100
+```text
+R1 ---------------- R2
+       EIGRP AS 100
+
 
 R1 and R2 form an EIGRP adjacency across:
 
 10.12.12.0/30
-
-
-# Router IDs
-
-R1:
-
+R1
+G0/0: 10.12.12.1/30
+Lo0:  1.1.1.1/32
+Lo1:  11.11.11.1/32
+R2
+G0/0: 10.12.12.2/30
+Lo0:  2.2.2.2/32
+Lo1:  22.22.22.2/32
+EIGRP Router IDs
+R1
 1.1.1.1
-
-R2:
-
+R2
 2.2.2.2
 
+The router IDs are configured using the Loopback0 addresses.
 
-# EIGRP Features
+EIGRP Features
 
-The lab demonstrates:
+The lab demonstrates the following EIGRP concepts and configuration features:
 
-- Neighbor formation
-- Passive interfaces
-- EIGRP stub
-- Summarization
-- Authentication
-- Metrics
-- Successor
-- Feasible successor
-- Feasible Distance
-- Reported Distance
-- Feasibility Condition
-- Variance
-- Topology table
-
-
-# Basic Configuration
-
-R1:
-
+EIGRP neighbor formation
+EIGRP passive interfaces
+EIGRP stub routing
+EIGRP route summarization
+EIGRP authentication
+EIGRP metric calculation
+Successor
+Feasible successor
+Feasible Distance (FD)
+Reported Distance (RD)
+Feasibility Condition
+Variance
+EIGRP topology table
+EIGRP route verification
+EIGRP route redistribution with OSPF
+Basic EIGRP Configuration
+R1
 router eigrp 100
  eigrp router-id 1.1.1.1
  network 10.12.12.0 0.0.0.3
-
-
-R2:
-
+R2
 router eigrp 100
  eigrp router-id 2.2.2.2
  network 10.12.12.0 0.0.0.3
 
+The 10.12.12.0/30 network provides the Layer 3 connection used to form the EIGRP adjacency between R1 and R2.
 
-# Passive Interfaces
+Loopbacks
 
-Loopbacks can be advertised without forming EIGRP adjacencies.
+Loopback interfaces are used for router identification and for testing route advertisement.
 
-Example:
+R1
+interface loopback0
+ ip address 1.1.1.1 255.255.255.255
 
+interface loopback1
+ ip address 11.11.11.1 255.255.255.255
+R2
+interface loopback0
+ ip address 2.2.2.2 255.255.255.255
+
+interface loopback1
+ ip address 22.22.22.2 255.255.255.255
+Passive Interfaces
+
+Loopback interfaces can be advertised through EIGRP without forming EIGRP neighbor adjacencies.
+
+R1
+router eigrp 100
+ passive-interface loopback0
+ passive-interface loopback1
+R2
 router eigrp 100
  passive-interface loopback0
  passive-interface loopback1
 
+The loopback networks remain advertised by EIGRP, but EIGRP Hellos are not sent through the loopback interfaces.
 
-# EIGRP Stub
+EIGRP Stub
 
-R1:
+R1 can be configured as an EIGRP stub router.
 
-router eigrp 100
- eigrp stub
+R1(config)#router eigrp 100
+R1(config-router)#eigrp stub
 
+This identifies R1 as a stub router and limits the types of routes it advertises to its EIGRP neighbor.
 
-# EIGRP Summarization
+EIGRP Summarization
 
-Example:
+R1 summarizes its 11.11.11.1/32 network toward R2.
 
-interface GigabitEthernet0/0
- ip summary-address eigrp 100 11.11.11.0 255.255.255.248
+Summary network:
 
+11.11.11.0/29
 
-# EIGRP Authentication
+Configuration:
 
+R1(config)#interface GigabitEthernet0/0
+R1(config-if)#ip summary-address eigrp 100 11.11.11.0 255.255.255.248
+
+This allows R1 to advertise the summarized 11.11.11.0/29 prefix toward R2 instead of advertising the individual 11.11.11.1/32 route.
+
+EIGRP Authentication
+
+EIGRP authentication is configured using a key chain.
+
+Key Chain
 key chain EIGRP-KEY
  key 1
   key-string CCNP
-
+R1
+interface GigabitEthernet0/0
+ ip authentication key-chain eigrp 100 EIGRP-KEY
+ ip authentication mode eigrp 100 md5
+R2
 interface GigabitEthernet0/0
  ip authentication key-chain eigrp 100 EIGRP-KEY
  ip authentication mode eigrp 100 md5
 
+Both sides of the EIGRP adjacency must use matching authentication settings and key information.
 
-# Verification
+EIGRP Route Metrics
 
+EIGRP uses multiple values when calculating its composite metric:
+
+Bandwidth
+Delay
+Reliability
+Load
+MTU
+
+The lab also demonstrates EIGRP path-selection concepts including:
+
+Successor
+Feasible Successor
+Feasible Distance (FD)
+Reported Distance (RD)
+Feasibility Condition
+
+The topology table can be used to examine these values and determine why EIGRP selects a particular path.
+
+EIGRP Variance
+
+EIGRP variance can be used to allow unequal-cost load balancing.
+
+Example:
+
+router eigrp 100
+ variance 2
+
+The variance value multiplies the feasible distance of the successor and determines whether additional paths can be installed as feasible unequal-cost paths.
+
+EIGRP and OSPF Redistribution
+
+R2 acts as the redistribution point between EIGRP AS 100 and OSPF.
+
+EIGRP → OSPF
+router ospf 1
+ redistribute eigrp 100 subnets
+OSPF → EIGRP
+router eigrp 100
+ redistribute ospf 1 metric 10000 100 255 1 1500
+
+The redistribution configuration allows routes learned through EIGRP to be introduced into OSPF and routes learned through OSPF to be introduced into EIGRP.
+
+EIGRP Verification
+Neighbor Adjacency
 show ip eigrp neighbors
-
+EIGRP Topology Table
 show ip eigrp topology
-
+All EIGRP Paths
 show ip eigrp topology all-links
-
+EIGRP Routes
 show ip route eigrp
-
+EIGRP Configuration and Networks
 show ip protocols
+Interface Information
+show ip eigrp interfaces
