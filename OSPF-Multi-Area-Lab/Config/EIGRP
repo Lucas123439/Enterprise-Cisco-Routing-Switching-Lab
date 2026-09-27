@@ -1,100 +1,25 @@
-# Lab 02 - EIGRP
+R1#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
 
-## Objectives
+R1(config)#router eigrp 100
+R1(config-router)#eigrp router-id 1.1.1.1
+R1(config-router)#network 10.12.12.0 0.0.0.3
+R1(config-router)#passive-interface Loopback0
+R1(config-router)#passive-interface Loopback1
+R1(config-router)#eigrp stub
+R1(config-router)#exit
 
-Configure and verify:
+R1(config)#key chain EIGRP-KEY
+R1(config-keychain)#key 1
+R1(config-keychain-key)#key-string CCNP
+R1(config-keychain-key)#exit
+R1(config-keychain)#exit
 
-- EIGRP AS 100
-- Router IDs
-- Neighbor formation
-- Passive interfaces
-- EIGRP stub
-- Summarization
-- Authentication
-- Metrics
-- Successor
-- Feasible successor
-- Feasibility condition
+R1(config)#interface GigabitEthernet0/0
+R1(config-if)#ip authentication key-chain eigrp 100 EIGRP-KEY
+R1(config-if)#ip authentication mode eigrp 100 md5
+R1(config-if)#ip summary-address eigrp 100 <summary-network> <summary-mask>
+R1(config-if)#exit
 
-
-# Topology
-
-R1 -------- R2
-
-EIGRP AS 100
-
-
-# Step 1 - Configure EIGRP
-
-R1:
-
-router eigrp 100
- eigrp router-id 1.1.1.1
- network 10.12.12.0 0.0.0.3
-
-
-R2:
-
-router eigrp 100
- eigrp router-id 2.2.2.2
- network 10.12.12.0 0.0.0.3
-
-
-# Step 2 - Verify Neighbor
-
-show ip eigrp neighbors
-
-
-# Step 3 - Passive Interfaces
-
-router eigrp 100
- passive-interface loopback0
- passive-interface loopback1
-
-
-# Step 4 - Configure EIGRP Stub
-
-R1:
-
-router eigrp 100
- eigrp stub
-
-
-# Step 5 - Configure Summarization
-
-interface GigabitEthernet0/0
- ip summary-address eigrp 100 <summary> <mask>
-
-
-# Step 6 - Authentication
-
-key chain EIGRP-KEY
- key 1
-  key-string CCNP
-
-interface GigabitEthernet0/0
- ip authentication key-chain eigrp 100 EIGRP-KEY
- ip authentication mode eigrp 100 md5
-
-
-# Step 7 - Examine the Topology Table
-
-show ip eigrp topology
-
-show ip eigrp topology all-links
-
-
-# Step 8 - Examine Routes
-
-show ip route eigrp
-
-
-# Troubleshooting
-
-Break authentication.
-
-Modify an interface metric.
-
-Remove a network statement.
-
-Verify the resulting neighbor and routing behavior.
+R1(config)#end
+R1#write memory
