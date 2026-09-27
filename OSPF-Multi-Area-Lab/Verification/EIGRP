@@ -1,0 +1,15 @@
+R1#show ip eigrp neighbors
+
+R1#show ip eigrp topology
+
+R1#show ip eigrp topology all-links
+
+R1#show ip route eigrp
+
+R1#show ip protocols
+
+R1#show ip eigrp interfaces
+
+R1#show ip eigrp interfaces detail
+
+R1#show running-config | section router eigrp
