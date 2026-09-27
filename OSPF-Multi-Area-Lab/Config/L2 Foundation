@@ -1,69 +1,103 @@
-# Lab 01 - Layer 2 Foundation
+SW1#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
 
-## Objectives
+!
+! VLAN Configuration
+!
 
-Configure and verify:
+SW1(config)#vlan 10
+SW1(config-vlan)#name VLAN10
+SW1(config-vlan)#exit
 
-- VLANs
-- Access ports
-- Trunk ports
-- 802.1Q
-- EtherChannel
-- LACP
-- STP
+SW1(config)#vlan 20
+SW1(config-vlan)#name VLAN20
+SW1(config-vlan)#exit
 
+SW1(config)#vlan 30
+SW1(config-vlan)#name VLAN30
+SW1(config-vlan)#exit
 
-# Step 1 - Create VLANs
+SW1(config)#vlan 40
+SW1(config-vlan)#name VLAN40
+SW1(config-vlan)#exit
 
-Configure VLANs 10, 20, 30, 40, and 50 as required by the topology.
+SW1(config)#vlan 50
+SW1(config-vlan)#name VLAN50
+SW1(config-vlan)#exit
 
-Verify:
+!
+! Access Port Configuration
+!
 
-show vlan brief
+SW1(config)#interface GigabitEthernet0/3
+SW1(config-if)#switchport mode access
+SW1(config-if)#switchport access vlan 10
+SW1(config-if)#exit
 
+!
+! LACP EtherChannel
+!
 
-# Step 2 - Configure Access Ports
+SW1(config)#interface range GigabitEthernet0/1 - 2
+SW1(config-if-range)#switchport mode trunk
+SW1(config-if-range)#channel-group 1 mode active
+SW1(config-if-range)#exit
 
-Assign appropriate switch ports to their VLANs.
+SW1(config)#interface Port-channel1
+SW1(config-if)#switchport mode trunk
+SW1(config-if)#end
 
-Example:
-
-interface GigabitEthernet0/3
- switchport mode access
- switchport access vlan 10
-
-
-# Step 3 - Configure Trunk
-
-interface GigabitEthernet0/1
- switchport mode trunk
-
-
-# Step 4 - Configure LACP EtherChannel
-
-interface range GigabitEthernet0/1 - 2
- switchport mode trunk
- channel-group 1 mode active
-
-interface Port-channel1
- switchport mode trunk
-
-
-# Step 5 - Verify
-
-show interfaces trunk
-
-show etherchannel summary
-
-show spanning-tree
-
-show vlan brief
+SW1#write memory
 
 
-# Troubleshooting Exercise
 
-Disconnect or shut down one EtherChannel member.
+SW2#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
 
-Verify that the Port-Channel remains operational.
+!
+! VLAN Configuration
+!
 
-Then introduce an LACP mismatch and observe the result.
+SW2(config)#vlan 10
+SW2(config-vlan)#name VLAN10
+SW2(config-vlan)#exit
+
+SW2(config)#vlan 20
+SW2(config-vlan)#name VLAN20
+SW2(config-vlan)#exit
+
+SW2(config)#vlan 30
+SW2(config-vlan)#name VLAN30
+SW2(config-vlan)#exit
+
+SW2(config)#vlan 40
+SW2(config-vlan)#name VLAN40
+SW2(config-vlan)#exit
+
+SW2(config)#vlan 50
+SW2(config-vlan)#name VLAN50
+SW2(config-vlan)#exit
+
+!
+! Access Port Configuration
+!
+
+SW2(config)#interface GigabitEthernet0/3
+SW2(config-if)#switchport mode access
+SW2(config-if)#switchport access vlan 10
+SW2(config-if)#exit
+
+!
+! LACP EtherChannel
+!
+
+SW2(config)#interface range GigabitEthernet0/1 - 2
+SW2(config-if-range)#switchport mode trunk
+SW2(config-if-range)#channel-group 1 mode active
+SW2(config-if-range)#exit
+
+SW2(config)#interface Port-channel1
+SW2(config-if)#switchport mode trunk
+SW2(config-if)#end
+
+SW2#write memory
