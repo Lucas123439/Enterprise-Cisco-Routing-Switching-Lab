@@ -1,21 +1,14 @@
 R2#configure terminal
 Enter configuration commands, one per line.  End with CNTL/Z.
 
-!
-! EIGRP AS 100
-!
-
 R2(config)#router eigrp 100
 R2(config-router)#redistribute ospf 1 metric 10000 100 255 1 1500
 R2(config-router)#exit
 
-!
-! OSPF Process 1
-!
-
 R2(config)#router ospf 1
 R2(config-router)#redistribute eigrp 100 subnets
-R2(config-router)#end
+R2(config-router)#exit
+
+R2(config)#end
 
 R2#write memory
-
