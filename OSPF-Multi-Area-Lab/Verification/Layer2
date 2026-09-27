@@ -1,0 +1,19 @@
+SW1#show vlan brief
+
+SW1#show interfaces status
+
+SW1#show interfaces trunk
+
+SW1#show etherchannel summary
+
+SW1#show interfaces port-channel 1
+
+SW1#show spanning-tree
+
+SW1#show spanning-tree vlan 10
+
+SW1#show spanning-tree vlan 20
+
+SW1#show mac address-table
+
+SW1#show interfaces counters errors
