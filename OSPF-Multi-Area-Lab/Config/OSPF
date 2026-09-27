@@ -1,51 +1,31 @@
 R2#configure terminal
 Enter configuration commands, one per line.  End with CNTL/Z.
 
-!
-! OSPF Process 1
-!
+R2(config)#interface Loopback0
+R2(config-if)#ip address 2.2.2.2 255.255.255.255
+R2(config-if)#exit
+
+R2(config)#interface Loopback1
+R2(config-if)#ip address 22.22.22.2 255.255.255.255
+R2(config-if)#exit
 
 R2(config)#router ospf 1
 R2(config-router)#router-id 2.2.2.2
 R2(config-router)#network 10.23.23.0 0.0.0.3 area 0
-R2(config-router)#exit
-
-!
-! Passive Interface
-!
-
-R2(config)#router ospf 1
+R2(config-router)#network 2.2.2.2 0.0.0.0 area 0
+R2(config-router)#network 22.22.22.2 0.0.0.0 area 10
+R2(config-router)#passive-interface Loopback0
 R2(config-router)#passive-interface Loopback1
 R2(config-router)#exit
-
-!
-! OSPF Authentication
-!
 
 R2(config)#interface GigabitEthernet0/0
 R2(config-if)#ip ospf authentication message-digest
 R2(config-if)#ip ospf message-digest-key 1 md5 CCNP
 R2(config-if)#exit
 
-!
-! Area 10
-!
-
-R2(config)#router ospf 1
-R2(config-router)#network <area-10-network> <wildcard> area 10
-R2(config-router)#exit
-
-!
-! Area 10 Summarization
-!
-
 R2(config)#router ospf 1
 R2(config-router)#area 10 range <summary-network> <summary-mask>
 R2(config-router)#exit
-
-!
-! Default Route
-!
 
 R2(config)#ip route 0.0.0.0 0.0.0.0 <next-hop>
 
@@ -56,42 +36,35 @@ R2(config-router)#end
 R2#write memory
 
 
-
 R3#configure terminal
 Enter configuration commands, one per line.  End with CNTL/Z.
 
-!
-! OSPF Process 1
-!
+R3(config)#interface Loopback0
+R3(config-if)#ip address 3.3.3.3 255.255.255.255
+R3(config-if)#exit
+
+R3(config)#interface Loopback1
+R3(config-if)#ip address 33.33.33.3 255.255.255.255
+R3(config-if)#exit
 
 R3(config)#router ospf 1
 R3(config-router)#router-id 3.3.3.3
 R3(config-router)#network 10.23.23.0 0.0.0.3 area 0
-R3(config-router)#exit
-
-!
-! Area 10
-!
-
-R3(config)#router ospf 1
-R3(config-router)#network <area-10-network> <wildcard> area 10
-R3(config-router)#exit
-
-!
-! Passive Interface
-!
-
-R3(config)#router ospf 1
+R3(config-router)#network 3.3.3.3 0.0.0.0 area 0
+R3(config-router)#network 33.33.33.3 0.0.0.0 area 10
+R3(config-router)#passive-interface Loopback0
 R3(config-router)#passive-interface Loopback1
 R3(config-router)#exit
-
-!
-! OSPF Authentication
-!
 
 R3(config)#interface GigabitEthernet0/0
 R3(config-if)#ip ospf authentication message-digest
 R3(config-if)#ip ospf message-digest-key 1 md5 CCNP
-R3(config-if)#end
+R3(config-if)#exit
+
+R3(config)#router ospf 1
+R3(config-router)#area 10 range <summary-network> <summary-mask>
+R3(config-router)#exit
+
+R3(config)#end
 
 R3#write memory
