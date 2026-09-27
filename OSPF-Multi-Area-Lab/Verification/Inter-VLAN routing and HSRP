@@ -1,0 +1,68 @@
+R2#show ip interface brief
+
+R2#show ip interface GigabitEthernet1/0.10
+
+R2#show ip interface GigabitEthernet1/0.20
+
+R2#show ip interface GigabitEthernet1/0.30
+
+R2#show ip interface GigabitEthernet1/0.40
+
+R2#show ip interface GigabitEthernet1/0.50
+
+R2#show ip interface GigabitEthernet1/0.60
+
+R2#show standby brief
+
+R2#show standby
+
+R2#show ip route connected
+
+R2#show running-config interface GigabitEthernet1/0
+
+R2#show running-config interface GigabitEthernet1/0.10
+
+R2#show running-config interface GigabitEthernet1/0.20
+
+R2#show running-config interface GigabitEthernet1/0.30
+
+R2#show running-config interface GigabitEthernet1/0.40
+
+R2#show running-config interface GigabitEthernet1/0.50
+
+R2#show running-config interface GigabitEthernet1/0.60
+
+
+R3#show ip interface brief
+
+R3#show ip interface GigabitEthernet1/0.10
+
+R3#show ip interface GigabitEthernet1/0.20
+
+R3#show ip interface GigabitEthernet1/0.30
+
+R3#show ip interface GigabitEthernet1/0.40
+
+R3#show ip interface GigabitEthernet1/0.50
+
+R3#show ip interface GigabitEthernet1/0.60
+
+R3#show standby brief
+
+R3#show standby
+
+R3#show ip route connected
+
+R3#show running-config interface GigabitEthernet1/0
+
+R3#show running-config interface GigabitEthernet1/0.10
+
+R3#show running-config interface GigabitEthernet1/0.20
+
+R3#show running-config interface GigabitEthernet1/0.30
+
+R3#show running-config interface GigabitEthernet1/0.40
+
+R3#show running-config interface GigabitEthernet1/0.50
+
+R3#show running-config interface GigabitEthernet1/0.60
