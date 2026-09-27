@@ -1,0 +1,129 @@
+R2#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+
+R2(config)#interface GigabitEthernet1/0
+R2(config-if)#no shutdown
+R2(config-if)#exit
+
+R2(config)#interface GigabitEthernet1/0.10
+R2(config-subif)#encapsulation dot1Q 10
+R2(config-subif)#ip address 192.168.10.2 255.255.255.0
+R2(config-subif)#standby version 2
+R2(config-subif)#standby 10 ip 192.168.10.1
+R2(config-subif)#standby 10 priority 110
+R2(config-subif)#standby 10 preempt
+R2(config-subif)#exit
+
+R2(config)#interface GigabitEthernet1/0.20
+R2(config-subif)#encapsulation dot1Q 20
+R2(config-subif)#ip address 192.168.20.2 255.255.255.0
+R2(config-subif)#standby version 2
+R2(config-subif)#standby 20 ip 192.168.20.1
+R2(config-subif)#standby 20 priority 110
+R2(config-subif)#standby 20 preempt
+R2(config-subif)#exit
+
+R2(config)#interface GigabitEthernet1/0.30
+R2(config-subif)#encapsulation dot1Q 30
+R2(config-subif)#ip address 192.168.30.2 255.255.255.0
+R2(config-subif)#standby version 2
+R2(config-subif)#standby 30 ip 192.168.30.1
+R2(config-subif)#standby 30 priority 110
+R2(config-subif)#standby 30 preempt
+R2(config-subif)#exit
+
+R2(config)#interface GigabitEthernet1/0.40
+R2(config-subif)#encapsulation dot1Q 40
+R2(config-subif)#ip address 192.168.40.2 255.255.255.0
+R2(config-subif)#standby version 2
+R2(config-subif)#standby 40 ip 192.168.40.1
+R2(config-subif)#standby 40 priority 110
+R2(config-subif)#standby 40 preempt
+R2(config-subif)#exit
+
+R2(config)#interface GigabitEthernet1/0.50
+R2(config-subif)#encapsulation dot1Q 50
+R2(config-subif)#ip address 192.168.50.2 255.255.255.0
+R2(config-subif)#standby version 2
+R2(config-subif)#standby 50 ip 192.168.50.1
+R2(config-subif)#standby 50 priority 110
+R2(config-subif)#standby 50 preempt
+R2(config-subif)#exit
+
+R2(config)#interface GigabitEthernet1/0.60
+R2(config-subif)#encapsulation dot1Q 60
+R2(config-subif)#ip address 192.168.60.2 255.255.255.0
+R2(config-subif)#standby version 2
+R2(config-subif)#standby 60 ip 192.168.60.1
+R2(config-subif)#standby 60 priority 110
+R2(config-subif)#standby 60 preempt
+R2(config-subif)#exit
+
+R2(config)#end
+R2#write memory
+
+
+
+R3#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+
+R3(config)#interface GigabitEthernet1/0
+R3(config-if)#no shutdown
+R3(config-if)#exit
+
+R3(config)#interface GigabitEthernet1/0.10
+R3(config-subif)#encapsulation dot1Q 10
+R3(config-subif)#ip address 192.168.10.3 255.255.255.0
+R3(config-subif)#standby version 2
+R3(config-subif)#standby 10 ip 192.168.10.1
+R3(config-subif)#standby 10 priority 100
+R3(config-subif)#standby 10 preempt
+R3(config-subif)#exit
+
+R3(config)#interface GigabitEthernet1/0.20
+R3(config-subif)#encapsulation dot1Q 20
+R3(config-subif)#ip address 192.168.20.3 255.255.255.0
+R3(config-subif)#standby version 2
+R3(config-subif)#standby 20 ip 192.168.20.1
+R3(config-subif)#standby 20 priority 100
+R3(config-subif)#standby 20 preempt
+R3(config-subif)#exit
+
+R3(config)#interface GigabitEthernet1/0.30
+R3(config-subif)#encapsulation dot1Q 30
+R3(config-subif)#ip address 192.168.30.3 255.255.255.0
+R3(config-subif)#standby version 2
+R3(config-subif)#standby 30 ip 192.168.30.1
+R3(config-subif)#standby 30 priority 100
+R3(config-subif)#standby 30 preempt
+R3(config-subif)#exit
+
+R3(config)#interface GigabitEthernet1/0.40
+R3(config-subif)#encapsulation dot1Q 40
+R3(config-subif)#ip address 192.168.40.3 255.255.255.0
+R3(config-subif)#standby version 2
+R3(config-subif)#standby 40 ip 192.168.40.1
+R3(config-subif)#standby 40 priority 100
+R3(config-subif)#standby 40 preempt
+R3(config-subif)#exit
+
+R3(config)#interface GigabitEthernet1/0.50
+R3(config-subif)#encapsulation dot1Q 50
+R3(config-subif)#ip address 192.168.50.3 255.255.255.0
+R3(config-subif)#standby version 2
+R3(config-subif)#standby 50 ip 192.168.50.1
+R3(config-subif)#standby 50 priority 100
+R3(config-subif)#standby 50 preempt
+R3(config-subif)#exit
+
+R3(config)#interface GigabitEthernet1/0.60
+R3(config-subif)#encapsulation dot1Q 60
+R3(config-subif)#ip address 192.168.60.3 255.255.255.0
+R3(config-subif)#standby version 2
+R3(config-subif)#standby 60 ip 192.168.60.1
+R3(config-subif)#standby 60 priority 100
+R3(config-subif)#standby 60 preempt
+R3(config-subif)#exit
+
+R3(config)#end
+R3#write memory
