@@ -1,0 +1,69 @@
+# Lab 01 - Layer 2 Foundation
+
+## Objectives
+
+Configure and verify:
+
+- VLANs
+- Access ports
+- Trunk ports
+- 802.1Q
+- EtherChannel
+- LACP
+- STP
+
+
+# Step 1 - Create VLANs
+
+Configure VLANs 10, 20, 30, 40, and 50 as required by the topology.
+
+Verify:
+
+show vlan brief
+
+
+# Step 2 - Configure Access Ports
+
+Assign appropriate switch ports to their VLANs.
+
+Example:
+
+interface GigabitEthernet0/3
+ switchport mode access
+ switchport access vlan 10
+
+
+# Step 3 - Configure Trunk
+
+interface GigabitEthernet0/1
+ switchport mode trunk
+
+
+# Step 4 - Configure LACP EtherChannel
+
+interface range GigabitEthernet0/1 - 2
+ switchport mode trunk
+ channel-group 1 mode active
+
+interface Port-channel1
+ switchport mode trunk
+
+
+# Step 5 - Verify
+
+show interfaces trunk
+
+show etherchannel summary
+
+show spanning-tree
+
+show vlan brief
+
+
+# Troubleshooting Exercise
+
+Disconnect or shut down one EtherChannel member.
+
+Verify that the Port-Channel remains operational.
+
+Then introduce an LACP mismatch and observe the result.
