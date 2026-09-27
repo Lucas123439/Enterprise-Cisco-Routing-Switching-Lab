@@ -1,0 +1,157 @@
+# OSPF Design
+
+## OSPF Process
+
+OSPF process ID:
+
+1
+
+
+# Router IDs
+
+R2:
+
+2.2.2.2
+
+R3:
+
+3.3.3.3
+
+
+# Area 0
+
+R2 and R3 form the primary OSPF adjacency across:
+
+10.23.23.0/30
+
+R2:
+
+10.23.23.1/30
+
+R3:
+
+10.23.23.2/30
+
+
+# OSPF ABR
+
+R3 is designed to operate as an Area Border Router.
+
+R3 connects:
+
+Area 0
+
+and
+
+Area 10
+
+
+# OSPF Features
+
+The lab demonstrates:
+
+- OSPF neighbor formation
+- Passive interfaces
+- OSPF authentication
+- OSPF LSDB
+- LSA types
+- Inter-area routing
+- ABR operation
+- Area summarization
+- Stub areas
+- Totally stubby areas
+- NSSA
+- Default route injection
+
+
+# Basic OSPF Configuration
+
+R2:
+
+router ospf 1
+ router-id 2.2.2.2
+ network 10.23.23.0 0.0.0.3 area 0
+
+
+R3:
+
+router ospf 1
+ router-id 3.3.3.3
+ network 10.23.23.0 0.0.0.3 area 0
+
+
+# Passive Interfaces
+
+VLAN and loopback interfaces can be made passive when they should
+advertise their networks but should not form OSPF adjacencies.
+
+Example:
+
+router ospf 1
+ passive-interface loopback1
+
+
+# OSPF Authentication
+
+Example:
+
+interface GigabitEthernet0/0
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 1 md5 CCNP
+
+
+# OSPF Area Summarization
+
+ABR summarization example:
+
+router ospf 1
+ area 10 range 10.10.0.0 255.255.0.0
+
+
+# Default Route
+
+Example:
+
+ip route 0.0.0.0 0.0.0.0 <next-hop>
+
+router ospf 1
+ default-information originate
+
+
+# Stub Area
+
+router ospf 1
+ area 10 stub
+
+
+# Totally Stubby Area
+
+router ospf 1
+ area 10 stub no-summary
+
+
+# NSSA
+
+router ospf 1
+ area 10 nssa
+
+
+# NSSA Totally Stubby
+
+router ospf 1
+ area 10 nssa no-summary
+
+
+# Verification
+
+show ip ospf neighbor
+
+show ip ospf database
+
+show ip ospf interface
+
+show ip ospf interface brief
+
+show ip route ospf
+
+show ip protocols
