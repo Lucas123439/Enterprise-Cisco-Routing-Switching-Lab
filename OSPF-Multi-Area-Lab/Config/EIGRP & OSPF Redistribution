@@ -1,8 +1,8 @@
 R2#configure terminal
 Enter configuration commands, one per line.  End with CNTL/Z.
 
-R2(config)#access-list 10 permit <network-1> <wildcard>
-R2(config)#access-list 10 permit <network-2> <wildcard>
+R2(config)#access-list 10 permit 11.11.11.1 0.0.0.0
+R2(config)#access-list 10 permit 22.22.22.2 0.0.0.0
 
 R2(config)#route-map EIGRP-TO-OSPF permit 10
 R2(config-route-map)#match ip address 10
