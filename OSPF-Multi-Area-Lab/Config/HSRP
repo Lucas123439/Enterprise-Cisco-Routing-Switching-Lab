@@ -1,67 +1,17 @@
-# Lab 04 - HSRP
+R2#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
 
-## Objectives
+!
+! HSRP Configuration
+!
 
-Configure and verify:
+R2(config)#interface GigabitEthernet1/0.10
+R2(config-subif)#encapsulation dot1q 10
+R2(config-subif)#ip address 192.168.10.2 255.255.255.0
+R2(config-subif)#standby version 2
+R2(config-subif)#standby 10 ip 192.168.10.1
+R2(config-subif)#standby 10 priority 110
+R2(config-subif)#standby 10 preempt
+R2(config-subif)#end
 
-- HSRP version 2
-- Active router
-- Standby router
-- HSRP priority
-- Preemption
-- Gateway failover
-
-
-# Topology
-
-             Switch
-             /    \
-            /      \
-           R2      R3
-         Active   Standby
-
-
-# R2
-
-R2 should use:
-
-Priority 110
-
-Preempt enabled
-
-
-# R3
-
-R3 should use:
-
-Priority 100
-
-Preempt enabled
-
-
-# Example
-
-interface GigabitEthernet1/0.10
- encapsulation dot1q 10
- ip address 192.168.10.2 255.255.255.0
- standby version 2
- standby 10 ip 192.168.10.1
- standby 10 priority 110
- standby 10 preempt
-
-
-# Verify
-
-show standby brief
-
-show standby
-
-
-# Failure Test
-
-1. Confirm R2 is Active.
-2. Confirm R3 is Standby.
-3. Shut down R2's relevant interface.
-4. Verify R3 becomes Active.
-5. Restore R2.
-6. Verify preemption.
+R2#write memory
