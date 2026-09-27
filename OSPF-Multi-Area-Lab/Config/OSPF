@@ -1,0 +1,140 @@
+# Lab 03 - OSPF
+
+## Objectives
+
+Configure and verify:
+
+- OSPF Area 0
+- OSPF Area 10
+- ABR
+- Passive interfaces
+- Authentication
+- LSDB
+- LSA types
+- Summarization
+- Stub areas
+- Totally stubby areas
+- NSSA
+- Default route
+
+
+# Topology
+
+R2 -------- R3
+     Area 0
+       |
+      R3
+       |
+    Area 10
+
+
+# Step 1 - Configure Area 0
+
+R2:
+
+router ospf 1
+ router-id 2.2.2.2
+ network 10.23.23.0 0.0.0.3 area 0
+
+
+R3:
+
+router ospf 1
+ router-id 3.3.3.3
+ network 10.23.23.0 0.0.0.3 area 0
+
+
+# Step 2 - Verify
+
+show ip ospf neighbor
+
+
+# Step 3 - Configure Area 10
+
+Assign unique Area 10 networks before implementation.
+
+Example:
+
+router ospf 1
+ network <area-10-network> <wildcard> area 10
+
+
+# Step 4 - Verify ABR
+
+show ip ospf
+
+
+# Step 5 - Passive Interfaces
+
+router ospf 1
+ passive-interface loopback1
+
+
+# Step 6 - Authentication
+
+interface GigabitEthernet0/0
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 1 md5 CCNP
+
+
+# Step 7 - Examine LSDB
+
+show ip ospf database
+
+
+# Step 8 - Examine Routes
+
+show ip route ospf
+
+
+# Step 9 - Area Summarization
+
+router ospf 1
+ area 10 range <summary> <mask>
+
+
+# Step 10 - Default Route
+
+ip route 0.0.0.0 0.0.0.0 <next-hop>
+
+router ospf 1
+ default-information originate
+
+
+# Step 11 - Stub Area
+
+router ospf 1
+ area 10 stub
+
+
+# Step 12 - Totally Stubby
+
+router ospf 1
+ area 10 stub no-summary
+
+
+# Step 13 - NSSA
+
+router ospf 1
+ area 10 nssa
+
+
+# Step 14 - NSSA No Summary
+
+router ospf 1
+ area 10 nssa no-summary
+
+
+# Verification
+
+show ip ospf neighbor
+
+show ip ospf database
+
+show ip ospf interface
+
+show ip ospf interface brief
+
+show ip route ospf
+
+show ip protocols
