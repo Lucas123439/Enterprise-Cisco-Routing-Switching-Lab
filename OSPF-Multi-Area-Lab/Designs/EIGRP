@@ -196,3 +196,12 @@ EIGRP Configuration and Networks
 show ip protocols
 Interface Information
 show ip eigrp interfaces
+
+
+R1 and R2 use EIGRP AS 100 to provide dynamic routing across the 10.12.12.0/30 transit network.
+
+Loopback interfaces provide stable router identifiers and test networks. Passive interfaces allow the loopback networks to be advertised without attempting to form EIGRP adjacencies.
+
+R1 demonstrates EIGRP stub routing and route summarization, while EIGRP authentication secures the adjacency between R1 and R2.
+
+R2 also functions as the routing boundary between EIGRP AS 100 and the OSPF domain, allowing route redistribution between the two routing protocols.
